@@ -8,6 +8,8 @@ docker-build-master:
       "$CI_REGISTRY"
     - apk add --update curl
   script:
+    - docker build --pull -t "build-stage" --target "build-stage" .
+    - docker run "build-stage" npm run lint
     - docker build --pull -t "$CI_REGISTRY_IMAGE" .
     - docker run -d -p 8080:80 "$CI_REGISTRY_IMAGE"
     - curl -f docker:8080
@@ -25,6 +27,8 @@ docker-build:
       "$CI_REGISTRY"
     - apk add --update curl
   script:
+    - docker build --pull -t "build-stage" --target "build-stage" .
+    - docker run "build-stage" npm run lint
     - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
     - docker run -d -p 8080:80 "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
     - curl -f docker:8080
